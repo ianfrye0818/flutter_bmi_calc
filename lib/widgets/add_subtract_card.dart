@@ -1,4 +1,5 @@
 import 'package:bmi_calc/widgets/reusable_card.dart';
+import 'package:bmi_calc/widgets/rounded_icon_button.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/constants.dart';
@@ -33,13 +34,13 @@ class AddSubtractSelectorCard extends StatelessWidget {
               style: kNumberTextStyle,
             ),
             Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-              FloatingActionButton(
+              RoundedIconButton(
                 onPressed: onSubtract,
-                child: const Icon(Icons.remove),
+                icon: Icons.remove,
               ),
-              FloatingActionButton(
+              RoundedIconButton(
                 onPressed: onAdd,
-                child: const Icon(Icons.add),
+                icon: Icons.add,
               ),
             ]),
           ],
