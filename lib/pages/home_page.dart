@@ -1,9 +1,11 @@
-import 'package:bmi_calc/widgets/icon_column.dart';
-import 'package:bmi_calc/widgets/reusable_card.dart';
+import 'package:bmi_calc/widgets/BMI_alert_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
+import '../constants/constants.dart';
+import '../widgets/HeightCard.dart';
+import '../widgets/add_subtract_card.dart';
 import '../widgets/bottom_button.dart';
+import '../widgets/gender_selector.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -13,8 +15,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  static const activeCardColor = Color(0xFF1D1E33);
+  double _height = 66;
+  Genders _gender = Genders.male;
+  double _weight = 150;
+  double _age = 25;
 
+  double _calculateBMI() {
+    return _weight / (_height * _height) * 703;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,57 +30,83 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: const Text("BMI Calculator"),
       ),
-      body: const SafeArea(
+      body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
               child: Row(
                 children: [
-                  Expanded(
-                    child: ReusableCard(
-                      bgColor: activeCardColor,
-                      child:
-                          IconColumn(icon: FontAwesomeIcons.mars, text: 'MALE'),
-                    ),
-                  ),
-                  Expanded(
-                    child: ReusableCard(
-                      bgColor: activeCardColor,
-                      child: IconColumn(
-                          icon: FontAwesomeIcons.venus, text: 'FEMALE'),
-                    ),
-                  ),
+                  GenderSelector(
+                      gender: Genders.male,
+                      onPressed: () => setState(() {
+                            _gender = Genders.male;
+                          }),
+                      isActive: _gender == Genders.male),
+                  GenderSelector(
+                      gender: Genders.female,
+                      onPressed: () => setState(() {
+                            _gender = Genders.female;
+                          }),
+                      isActive: _gender == Genders.female),
                 ],
               ),
             ),
-            Expanded(
-              child: ReusableCard(
-                bgColor: activeCardColor,
-              ),
+            HeightCard(
+              height: _height,
+              onChange: (double value) {
+                setState(() {
+                  _height = value;
+                });
+              },
             ),
             Expanded(
               child: Row(
                 children: [
-                  Expanded(
-                    child: ReusableCard(
-                      bgColor: activeCardColor,
-                    ),
+                  AddSubtractSelectorCard(
+                    value: _weight,
+                    title: 'Weight',
+                    onAdd: () {
+                      setState(() {
+                        if (_weight < 500) _weight++;
+                      });
+                    },
+                    onSubtract: () {
+                      setState(() {
+                        if (_weight > 0) _weight--;
+                      });
+                    },
                   ),
-                  Expanded(
-                    child: ReusableCard(
-                      bgColor: activeCardColor,
-                    ),
+                  AddSubtractSelectorCard(
+                    value: _age,
+                    title: 'Age',
+                    onAdd: () {
+                      setState(() {
+                        if (_age < 100) _age++;
+                      });
+                    },
+                    onSubtract: () {
+                      setState(() {
+                        if (_age > 1) _age--;
+                      });
+                    },
                   ),
                 ],
               ),
             ),
-            BottomButton(),
+            BottomButton(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (context) {
+                      return BMIAlertDialog(
+                          calculate: _calculateBMI, gender: _gender);
+                    });
+              },
+            ),
           ],
         ),
       ),
     );
   }
 }
-
-
-
