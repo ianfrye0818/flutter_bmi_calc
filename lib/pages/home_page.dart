@@ -5,6 +5,7 @@ import '../constants/constants.dart';
 import '../widgets/HeightCard.dart';
 import '../widgets/add_subtract_card.dart';
 import '../widgets/bottom_button.dart';
+import '../widgets/expanded_row.dart';
 import '../widgets/gender_selector.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,23 +35,21 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: Row(
-                children: [
-                  GenderSelector(
-                      gender: Genders.male,
-                      onPressed: () => setState(() {
-                            _gender = Genders.male;
-                          }),
-                      isActive: _gender == Genders.male),
-                  GenderSelector(
-                      gender: Genders.female,
-                      onPressed: () => setState(() {
-                            _gender = Genders.female;
-                          }),
-                      isActive: _gender == Genders.female),
-                ],
-              ),
+            ExpandedRow(
+              children: [
+                GenderSelector(
+                    gender: Genders.male,
+                    onPressed: () => setState(() {
+                          _gender = Genders.male;
+                        }),
+                    isActive: _gender == Genders.male),
+                GenderSelector(
+                    gender: Genders.female,
+                    onPressed: () => setState(() {
+                          _gender = Genders.female;
+                        }),
+                    isActive: _gender == Genders.female),
+              ],
             ),
             HeightCard(
               height: _height,
@@ -60,48 +59,47 @@ class _HomePageState extends State<HomePage> {
                 });
               },
             ),
-            Expanded(
-              child: Row(
-                children: [
-                  AddSubtractSelectorCard(
-                    value: _weight,
-                    title: 'Weight',
-                    onAdd: () {
-                      setState(() {
-                        if (_weight < 500) _weight++;
-                      });
-                    },
-                    onSubtract: () {
-                      setState(() {
-                        if (_weight > 0) _weight--;
-                      });
-                    },
-                  ),
-                  AddSubtractSelectorCard(
-                    value: _age,
-                    title: 'Age',
-                    onAdd: () {
-                      setState(() {
-                        if (_age < 100) _age++;
-                      });
-                    },
-                    onSubtract: () {
-                      setState(() {
-                        if (_age > 1) _age--;
-                      });
-                    },
-                  ),
-                ],
-              ),
+            ExpandedRow(
+              children: [
+                AddSubtractSelectorCard(
+                  value: _weight,
+                  title: 'Weight',
+                  onAdd: () {
+                    setState(() {
+                      if (_weight < 500) _weight++;
+                    });
+                  },
+                  onSubtract: () {
+                    setState(() {
+                      if (_weight > 0) _weight--;
+                    });
+                  },
+                ),
+                AddSubtractSelectorCard(
+                  value: _age,
+                  title: 'Age',
+                  onAdd: () {
+                    setState(() {
+                      if (_age < 100) _age++;
+                    });
+                  },
+                  onSubtract: () {
+                    setState(() {
+                      if (_age > 1) _age--;
+                    });
+                  },
+                ),
+              ],
             ),
             BottomButton(
               onTap: () {
                 showDialog(
-                    context: context,
-                    builder: (context) {
-                      return BMIAlertDialog(
-                          calculate: _calculateBMI, gender: _gender);
-                    });
+                  context: context,
+                  builder: (context) {
+                    return BMIAlertDialog(
+                        calculate: _calculateBMI, gender: _gender);
+                  },
+                );
               },
             ),
           ],
